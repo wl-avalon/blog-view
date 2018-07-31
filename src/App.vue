@@ -15,6 +15,10 @@ body{
     display: block;
     margin: auto;
     font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, "Microsoft YaHei";
-    background-color: #3B4C4A;
+    background-color: #DBC7A6;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
 }
 </style>
