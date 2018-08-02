@@ -4,7 +4,7 @@
         {{itemName}}
       </div>
       <div v-if="clickDown" class="item-list">
-        <div class="item-name" v-for="item in itemList" :key="item">
+        <div class="item-name" v-for="(item, index) in itemList" :key="index">
           {{item.title}}
         </div>
       </div>
@@ -35,22 +35,22 @@ export default {
       switch(id){
         case 1:{
           return [
-            {id: '1-1', title: 'PHP'},
-            {id: '1-2', title: 'MySQL'},
-            {id: '1-3', title: 'Linux'},
-            {id: '1-4', title: 'Nginx'}
+            {title: 'PHP'},
+            {title: 'MySQL'},
+            {title: 'Linux'},
+            {title: 'Nginx'}
           ]
         }
         case 2:{
           return [
-            {id: '2-1', title: '被讨厌的勇气'},
-            {id: '2-2', title: '原则'},
+            {title: '被讨厌的勇气'},
+            {title: '原则'},
           ]
         }
         case 3:{
           return [
-            {id: '3-1', title: '2018年'},
-            {id: '3-2', title: '2019年'},
+            {title: '2018年'},
+            {title: '2019年'},
           ];
         }
       }

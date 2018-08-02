@@ -32,11 +32,7 @@
     },
     methods:{
       clickIndexItem: function(id){
-          if(id === this.clickID){
-            this.clickID = 0;
-          }else{
-            this.clickID = id;
-          }
+          this.clickID = id;
       }
     }
   }

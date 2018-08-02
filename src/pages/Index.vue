@@ -14,6 +14,7 @@
 <script>
 import Banner from "@/components/Banner/Banner";
 import ArticleList from "@/components/ArticleList";
+// import router from '@/router'
 export default {
     name: "Index",
     components: {
