@@ -4,9 +4,10 @@
     <div class="description">夏冶兵的随笔</div>
     <div class="cut-line"></div>
     <div class="index-list">
-      <div @click="clickIndexItem(1)"><index-item v-bind:id=1 v-bind:clickID="clickID"></index-item></div>
-      <div @click="clickIndexItem(2)"><index-item v-bind:id=2 v-bind:clickID="clickID"></index-item></div>
-      <div @click="clickIndexItem(3)"><index-item v-bind:id=3 v-bind:clickID="clickID"></index-item></div>
+      <div v-for="(categoryItem, index) in mainCategoryList" v-bind:key="index">
+        <div class="main-item" @click="clickIndexItem(categoryItem.uuid, categoryItem.title)">{{categoryItem.title}}</div>
+        <index-item v-bind:id="categoryItem.uuid" v-bind:clickID="clickID" v-bind:title="categoryItem.title" @changeSubIndex="changeSubIndex"></index-item>
+      </div>
     </div>
   </div>
 </template>
@@ -22,8 +23,13 @@
     data() {
       return {
         bannerHeight: this.screenHeight,
-        clickID: 0,
+        clickID: "0",
+        mainCategoryList: [],
+        articleSummaryList: [],
       }
+    },
+    created(){
+      this.queryMainCategoryList();
     },
     watch:{
       screenHeight (val) {
@@ -31,8 +37,28 @@
       }
     },
     methods:{
-      clickIndexItem: function(id){
+      queryMainCategoryList(){
+        let that = this;
+        let url = "http://127.0.0.1:8000/blog/outer/query/getMainCategoryList";
+        this.$http.get(url)
+          .then(function (response) {
+            let mainCategoryList = response.data.data ? response.data.data : [];
+            that.mainCategoryList = mainCategoryList;
+          })
+          .catch(function (error) {
+            that.mainCategoryList = [];
+          });
+      },
+      clickIndexItem: function(id, title){
+        if(this.clickID === id){
+          this.clickID = 0;
+        }else{
           this.clickID = id;
+          this.$emit('changeSwitchItem', title, id);
+        }
+      },
+      changeSubIndex(id, subUuid, title){
+        this.$emit('changeSwitchItem', title, id, subUuid);
       }
     }
   }
@@ -69,5 +95,22 @@
   }
   .index-list{
     margin-top: 80px;
+  }
+  .main-item{
+    height: 40px;
+    font-size: 12px;
+    color:#ffffff;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    background-color: #3B4951;
+  }
+  .main-item:hover{
+    background-color: #27353D;
+    transition:background-color 0.2s;
+    -moz-transition: background-color 0.2s; /* Firefox 4 */
+    -webkit-transition: background-color 0.2s; /* Safari 和 Chrome */
+    -o-transition: background-color 0.2s; /* Opera */
   }
 </style>

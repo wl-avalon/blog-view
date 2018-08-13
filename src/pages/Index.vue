@@ -1,10 +1,11 @@
 <template>
 <div>
-    <banner v-bind:screenHeight="screenHeight"></banner>
+    <banner v-bind:screenHeight="screenHeight" @changeSwitchItem="switchCategoryChange"></banner>
     <div>
         <div class="content-framework" v-bind:style="{ width: screenWidth - 200 + 'px',height: screenHeight + 'px'}">
-            <div class="content-canvas" v-bind:style="{ width: screenWidth - 300 + 'px'}">
-                <article-list v-bind:pageIndex="pageIndex" v-bind:screenWidth="screenWidth"></article-list>
+            <div class="content-canvas" v-bind:style="canvasStyle">
+              <article-list v-show="articleUuid === ''" ref="articleList" v-bind:pageTitle="pageTitle" v-bind:screenWidth="screenWidth" v-bind:mainUuid="mainCategoryUuid" v-bind:subUuid="subCategoryUuid" @switchArticleItem="switchArticleItem"></article-list>
+              <article-detail v-show="articleUuid !== ''" v-bind:articleUuid="articleUuid" v-bind:screenHeight="screenHeight"></article-detail>
             </div>
         </div>
     </div>
@@ -14,18 +15,34 @@
 <script>
 import Banner from "@/components/Banner/Banner";
 import ArticleList from "@/components/ArticleList";
+import ArticleDetail from "@/components/ArticleDetail";
 // import router from '@/router'
 export default {
     name: "Index",
     components: {
         Banner: Banner,
         'article-list': ArticleList,
+        'article-detail' : ArticleDetail,
     },
     data(){
         return {
             screenWidth: document.documentElement.offsetWidth,
             screenHeight: document.documentElement.clientHeight,
-            pageIndex: "index",
+            pageTitle: "最近博文",
+            mainCategoryUuid: "",
+            subCategoryUuid: "",
+            articleUuid: "",
+            canvasStyle: {
+              width: document.documentElement.offsetWidth - 300 + 'px',
+              height: '550px',
+              display: 'block',
+              'background-color': 'rgba(251,251,251,0.4)',
+              filter: 'progid:DXImageTransform.Microsoft.Gradient(startColorstr=#40000000,endColorstr=#40000000)',
+              margin: 'auto',
+              overflow: 'visible',
+              'border-radius': '20px',
+              'padding-top': '50px',
+            },
         }
     },
     mounted () {
@@ -60,7 +77,49 @@ export default {
           }, 400)
         }
       }
-    }
+    },
+    methods:{
+      switchCategoryChange(pageTitle, mainUuid, subUuid = ''){
+        this.articleUuid = "";
+        this.mainCategoryUuid = mainUuid;
+        this.subCategoryUuid = subUuid;
+        this.pageTitle = pageTitle;
+        this.canvasStyle = {
+          width: document.documentElement.offsetWidth - 300 + 'px',
+          height: '550px',
+          display: 'block',
+          'background-color': 'rgba(251,251,251,0.4)',
+          filter: 'progid:DXImageTransform.Microsoft.Gradient(startColorstr=#40000000,endColorstr=#40000000)',
+          margin: 'auto',
+          overflow: 'visible',
+          'border-radius': '20px',
+          'padding-top': '50px',
+          'transition':'height 0.5s',
+          '-moz-transition': 'height 0.5s', /* Firefox 4 */
+          '-webkit-transition': 'height 0.5s', /* Safari 和 Chrome */
+          '-o-transition': 'height 0.5s', /* Opera */
+        };
+        // console.log(this.$refs);
+        this.$refs.articleList.flushArticleSummaryList(mainUuid, subUuid, 1, 20);
+      },
+      switchArticleItem(articleUuid){
+        this.articleUuid = articleUuid;
+        this.canvasStyle = {
+          width: document.documentElement.offsetWidth - 200 + 'px',
+          height: this.screenHeight + 'px',
+          display: 'block',
+          'background-color': 'rgba(251,251,251,0.4)',
+          filter: 'progid:DXImageTransform.Microsoft.Gradient(startColorstr=#40000000,endColorstr=#40000000)',
+          margin: 'auto',
+          overflow: 'visible',
+          // 'padding-top': '50px',
+          'transition':'height 0.5s',
+          '-moz-transition': 'height 0.5s', /* Firefox 4 */
+          '-webkit-transition': 'height 0.5s', /* Safari 和 Chrome */
+          '-o-transition': 'height 0.5s', /* Opera */
+        };
+      }
+    },
 }
 </script>
 
@@ -69,16 +128,9 @@ export default {
   background-color: #DBC7A6;
   float: left;
   overflow: auto;
-}
-
-.content-canvas{
-  height: 550px;
-  background-color:rgba(255,255,255,0.5);
-  filter:progid:DXImageTransform.Microsoft.Gradient(startColorstr=#40000000,endColorstr=#40000000);
-  margin: 80px auto auto auto;
-  overflow: visible;
-  border-radius: 20px;
-  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .list-area{

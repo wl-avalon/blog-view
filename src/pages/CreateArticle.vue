@@ -24,14 +24,21 @@
         </div>
       </div>
     </div>
+    <div class="article-title-area">
+      <div class="article-title">
+        <div class="article-title-tag">标题：</div>
+        <input class="title-input" v-model="articleTitle">
+      </div>
+    </div>
     <div id="editor">
-      <mavon-editor class='mavon' style="height: 100%" @save="$save" @imgAdd="$imgAdd" ref=md  :externalLink="externalLink" v-bind='props'></mavon-editor>
+      <mavon-editor class='mavon' style="height: 100%" @save="$save" @imgAdd="$imgAdd" ref=md  :externalLink="externalLink" v-bind='propsParams'></mavon-editor>
     </div>
   </div>
 </template>
 
 <script>
 var mavonEditor = require("mavon-editor");
+var qs = require('qs');
 import "mavon-editor/dist/css/index.css";
 export default {
   name: "CreateArticle",
@@ -40,7 +47,7 @@ export default {
   },
   data() {
     return {
-      props: {
+      propsParams: {
         value: "# 看看汉字效果怎么样\n ## innerapi/billing/queryDe"
       },
       externalLink: {
@@ -50,6 +57,7 @@ export default {
       },
       selectMain: -1,
       selectSub: -1,
+      articleTitle: "",
       mainCategoryList: [],
       subCategoryList: [],
     };
@@ -68,26 +76,27 @@ export default {
         alert("选择主副分类");
         return;
       }
-      if(str1 === ""){
-        alert("内容不能为空");
+      if(str1 === "" || this.articleTitle === ""){
+        alert("内容及标题不能为空");
       }
       let that = this;
       let params = {
         "mainUuid": this.mainCategoryList[that.selectMain].uuid,
         "subUuid": this.subCategoryList[that.selectSub].uuid,
-        "content": str1
+        "title": this.articleTitle,
+        "content": str1,
       }
       this.$http({
         method: "post",
         url: "http://127.0.0.1:8000/blog/outer/commit/addArticle",
-        data: this.$qs.stringify(params),
+        data: qs.stringify(params),
       }).then(function (response) {
               if(!response.data || !response.data.error || response.data.error.returnCode === undefined || response.data.error.returnCode != 0){
                 console.log(response);
                 alert("网络繁忙,请稍后再试");
               }else{
                 alert("文章创建成功");
-                that.props.value = "";
+                that.propsParams.value = "";
               }
           })
           .catch(function (error) {
@@ -96,9 +105,31 @@ export default {
             });
     },
     $imgAdd(pos, $file) {
-      console.log(pos);
       let $vm = this.$refs.md;
-      $vm.$img2Url(pos, "asdasd");
+      let formdata = new FormData();
+      formdata.append('image', $file);
+      this.$http({
+        url: "http://127.0.0.1:8000/blog/outer/commit/uploadImg",
+        method: 'post',
+        data: formdata,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }).then(function (response) {
+        if(!response.data || !response.data.error || response.data.error.returnCode === undefined || response.data.error.returnCode != 0){
+          console.log(response);
+          alert("网络繁忙,请稍后再试");
+        }else{
+          let imageUrl = response.data.data.imgUrl ? response.data.data.imgUrl : "";
+          if(imageUrl === ""){
+            alert("上传失败,图片地址为空");
+          }else{
+            alert("上传成功，图片地址为：" + imageUrl);
+            $vm.$img2Url(pos, imageUrl);
+          }
+        }
+      }).catch(function (error) {
+          console.log(error);
+          alert("网络繁忙,请稍后再试");
+      });
     },
     queryMainCategoryRecordList: function(){
       let that = this;
@@ -178,5 +209,25 @@ export default {
 
 .mavon {
   background-color: rgba(251, 251, 251, 0.5);
+}
+.article-title-area{
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+}
+.article-title{
+  margin:auto;
+  font-size: 20px;
+}
+.article-title-tag{
+  float: left;
+}
+.title-input{
+  width:500px;
+  margin:auto;
+  font-size: 20px;
+  float: left;
 }
 </style>
