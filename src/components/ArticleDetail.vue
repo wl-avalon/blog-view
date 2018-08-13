@@ -28,7 +28,7 @@ export default {
       },
       externalLink: {
         markdown_css: function() {
-          return "https://www.wl-avalon.com/css/markdown.css";
+          return "https://www.wl-avalon.com/static/css/markdown.css";
         }
       },
     };
@@ -41,9 +41,8 @@ export default {
   },
   methods: {
     queryArticleDetail(articleUuid){
-      console.log("asdasd");
       let that = this;
-      let url = "http://127.0.0.1:8000/blog/outer/query/getArticleDetail?articleUuid=" + articleUuid;
+      let url = "https://www.wl-avalon.com/blog/outer/query/getArticleDetail?articleUuid=" + articleUuid;
       this.$http.get(url)
         .then(function (response) {
           let articleDetail = response.data.data ? response.data.data : [];

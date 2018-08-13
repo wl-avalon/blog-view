@@ -42,7 +42,7 @@ export default {
   methods: {
     queryArticleSummaryList(mainUuid, subUuid, pageNo, pageSize){
       let that = this;
-      let url = "http://127.0.0.1:8000/blog/outer/query/getArticleSummaryList?mainUuid="+mainUuid+"&subUuid="+subUuid+"&pageNo="+pageNo+"&pageSize="+pageSize;
+      let url = "https://www.wl-avalon.com/blog/outer/query/getArticleSummaryList?mainUuid="+mainUuid+"&subUuid="+subUuid+"&pageNo="+pageNo+"&pageSize="+pageSize;
       this.$http.get(url)
         .then(function (response) {
           let articleSummaryList = response.data.data ? response.data.data : [];

@@ -39,7 +39,7 @@
     methods:{
       queryMainCategoryList(){
         let that = this;
-        let url = "http://127.0.0.1:8000/blog/outer/query/getMainCategoryList";
+        let url = "https://www.wl-avalon.com/blog/outer/query/getMainCategoryList";
         this.$http.get(url)
           .then(function (response) {
             let mainCategoryList = response.data.data ? response.data.data : [];
