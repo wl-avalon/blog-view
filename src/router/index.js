@@ -10,7 +10,7 @@ export default new Router({
   mode: "history",
   routes: [
     {
-      path: '/',
+      path: '/:pageRouter?/:articleUuid?',
       name: 'Index',
       component: Index
     },

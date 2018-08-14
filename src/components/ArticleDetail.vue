@@ -39,6 +39,12 @@ export default {
       this.queryArticleDetail(val);
     },
   },
+  created(){
+    let that = this;
+    if(that.articleUuid !== ""){
+      that.queryArticleDetail(that.articleUuid);
+    }
+  },
   methods: {
     queryArticleDetail(articleUuid){
       let that = this;

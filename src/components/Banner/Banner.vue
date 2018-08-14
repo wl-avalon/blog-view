@@ -59,7 +59,7 @@
       },
       changeSubIndex(id, subUuid, title){
         this.$emit('changeSwitchItem', title, id, subUuid);
-      }
+      },
     }
   }
 </script>

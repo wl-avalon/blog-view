@@ -45,7 +45,7 @@ export default {
             },
         }
     },
-    mounted () {
+    created () {
       const that = this;
       window.onresize = () => {
         return (() => {
@@ -54,6 +54,21 @@ export default {
           that.screenWidth = window.screenWidth;
           that.screenHeight = window.screenHeight
         })()
+      };
+      let routerParams = this.$route.params;
+      let pageRouter = routerParams.pageRouter ? routerParams.pageRouter : "index";
+      switch(pageRouter){
+        case "articleDetail":{
+          let articleUuid = routerParams.articleUuid ? routerParams.articleUuid : "";
+          if (articleUuid === "") {
+            break;
+          }
+          that.switchArticleItem(articleUuid);
+          break;
+        }
+        default:{
+          break;
+        }
       }
     },
     watch: {
@@ -100,9 +115,11 @@ export default {
           '-o-transition': 'height 0.5s', /* Opera */
         };
         // console.log(this.$refs);
+        this.$router.push({ path: '/' })
         this.$refs.articleList.flushArticleSummaryList(mainUuid, subUuid, 1, 20);
       },
       switchArticleItem(articleUuid){
+        this.$router.push({ path: '/articleDetail/' + articleUuid })
         this.articleUuid = articleUuid;
         this.canvasStyle = {
           width: document.documentElement.offsetWidth - 200 + 'px',
