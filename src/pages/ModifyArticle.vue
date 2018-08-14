@@ -28,7 +28,7 @@ export default {
       },
       externalLink: {
         markdown_css: function() {
-          return "https://www.wl-avalon.com/css/markdown.css";
+          return "https://www.wl-avalon.com/static/css/markdown.css";
         }
       },
       articleTitle: "",

@@ -25,6 +25,7 @@ export default {
         toolbarsFlag: false,
         subfield: false,
         defaultOpen: "preview",
+        codeStyle: "atom-one-dark",
       },
       externalLink: {
         markdown_css: function() {
