@@ -14,15 +14,15 @@ export default new Router({
       name: 'Index',
       component: Index
     },
-    // {
-    //   path: '/create/wzj/93327',
-    //   name: 'CreateArticle',
-    //   component: CreateArticle
-    // },
-    // {
-    //   path: '/modify/wzj/93327/:articleUuid',
-    //   name: 'ModifyArticle',
-    //   component: ModifyArticle
-    // },
+    {
+      path: '/create/wzj/93327',
+      name: 'CreateArticle',
+      component: CreateArticle
+    },
+    {
+      path: '/modify/wzj/93327/:articleUuid',
+      name: 'ModifyArticle',
+      component: ModifyArticle
+    },
   ]
 })
